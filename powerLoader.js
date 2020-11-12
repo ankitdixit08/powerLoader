@@ -1,13 +1,13 @@
 /**
  * @File Name          : powerLoader.js
  * @Description        : 
- * @Author             : Ankit Kumar (TCS)
+ * @Author             : Ankit Kumar
  * @Group              : 
- * @Last Modified By   : Ankit Kumar (TCS)
+ * @Last Modified By   : Ankit Kumar
  * @Last Modified On   : 10/5/2020, 10:50:36 pm
  * @Modification Log   : 
  * Ver       Date            Author      		    Modification
- * 1.0    9/5/2020   Ankit Kumar (TCS)     Initial Version
+ * 1.0    9/5/2020         Ankit Kumar      Initial Version
 **/
 import { LightningElement, wire} from "lwc";
 import getAllSobjects from "@salesforce/apex/showRelatedListViewOnAccountController.getAllSobjects";
