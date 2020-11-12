@@ -1,0 +1,258 @@
+<!--
+  @File Name          : powerLoader.html
+  @Description        : 
+  @Author             : Ankit Kumar (TCS)
+  @Group              : 
+  @Last Modified By   : Ankit Kumar (TCS)
+  @Last Modified On   : 12/5/2020, 9:59:58 am
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    9/5/2020   Ankit Kumar (TCS)     Initial Version
+-->
+<template>
+  <lightning-card title="Power Loader" icon-name="custom:custom2">
+    <div class="slds-is-relative">
+      <div class="slds-m-around_medium bodyClass">
+        <template if:true={section1}>
+          <div class="headingText">Select a object and upload the file</div>
+          <div
+            class="slds-grid slds-grid--vertical-align-center slds-grid--align-center"
+          >
+            <div class="slds-size--1-of-3">
+              <div class="slds-form-element">
+                <label
+                  class="slds-form-element__label"
+                  for="customInputForSobject"
+                  ><abbr class="slds-required" title="required">* </abbr>Select
+                  a object</label
+                >
+                <div class="slds-form-element__control">
+                  <input
+                    name="customInputForSobject"
+                    id="customInputForSobject"
+                    onchange={handleChange}
+                    onfocus={handleFocus}
+                    list="SobjectList"
+                    class="slds-input required"
+                    type="text"
+                    required
+                  />
+                  <datalist>
+                    <template for:each={allSobjects} for:item="item">
+                      <option key={item.value} value={item.value}
+                        >{item.value}</option
+                      >
+                    </template>
+                  </datalist>
+                  <span class="requiredText">{requiredText}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slds-col slds-m-around_medium">
+              <lightning-input
+                type="file"
+                label={fileName}
+                accept=".csv"
+                onchange={handleChange}
+                name="fileToUpload"
+                class="required"
+                required
+              >
+              </lightning-input>
+            </div>
+          </div>
+          <div class="slds-grid slds-grid_align-center">
+            <div class="slds-col">
+              <button
+                name="next1"
+                title="proceed with data load"
+                onclick={handleClick}
+                class="slds-button slds-button_success"
+              >
+                Proceed &nbsp;&nbsp;
+                <svg
+                  width="12pt"
+                  style="pointer-events: none;"
+                  viewBox="0 -22 512 511"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m512 233.820312-212.777344-233.320312v139.203125h-45.238281c-140.273437 0-253.984375 113.710937-253.984375 253.984375v73.769531l20.09375-22.019531c68.316406-74.851562 164.980469-117.5 266.324219-117.5h12.804687v139.203125zm0 0"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </template>
+        <template if:true={section2}>
+          <div class="headingText">Map fields with CSV Columns</div>
+          <div
+            class="slds-grid slds-grid--vertical-align-center slds-grid--align-center"
+          >
+            <div class="slds-size--1-of-2">
+              <div
+                class="slds-grid slds-grid--vertical-align-center slds-grid--align-center"
+              >
+                <div class="slds-size--1-of-2">
+                  <div class="slds-form-element">
+                    <label
+                      class="slds-form-element__label"
+                      for="customInputForExternalId"
+                      >Choose a field to use for mapping</label
+                    >
+                    <div class="slds-form-element__control">
+                      <template if:true={AllExternalIdsOfSobject}>
+                        <input
+                          name="customInputForExternalId"
+                          id="customInputForExternalId"
+                          onchange={handleChange}
+                          onfocus={handleFocus}
+                          list="ExternalidList"
+                          placeholder="Id will be used for default matching!"
+                          class="slds-input"
+                          type="text"
+                        />
+                        <datalist>
+                          <template
+                            for:each={AllExternalIdsOfSobject}
+                            for:item="item"
+                          >
+                            <option key={item} value={item}>{item}</option>
+                          </template>
+                        </datalist>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h2 class="tableHeading slds-m-around_small">Map Data points</h2>
+              <table
+                if:true={AllFeildsOfSObject}
+                class="slds-table slds-table_cell-buffer slds-table_bordered"
+              >
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                      <div class="slds-truncate" title="Key">
+                        Headers in csv
+                      </div>
+                    </th>
+                    <th class="" scope="col">
+                      <div class="slds-truncate" title="Value">
+                        Field Name in salesforce
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template
+                    for:each={allHeadersSelect}
+                    for:item="headerName"
+                    for:index="index"
+                  >
+                    <tr key={headerName.value}>
+                      <td value={index}>
+                        <div class="slds-text-color_success slds-text-title_bold">{headerName.value}</div>
+                      </td>
+                      <td>
+                        <div class="slds-form-element__control">
+                          <input
+                            name="customInputForDataList"
+                            aria-label={headerName.value}
+                            onchange={handleChange}
+                            onfocus={handleFocus}
+                            list="valueList"
+                            class="slds-input"
+                            type="text"
+                          />
+                          <datalist>
+                            <template
+                              for:each={AllFeildsOfSObject}
+                              for:item="item"
+                            >
+                              <option key={item} value={item}>{item}</option>
+                            </template>
+                          </datalist>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="slds-grid slds-grid_align-center">
+            <div class="slds-col">
+              <button
+                name="next2"
+                
+                title="proceed with data load"
+                onclick={handleClick}
+                class="slds-button slds-button_success slds-m-around_large"
+              >Load it!!</button>
+            </div>
+            <div class="slds-col">
+              <button
+                name="next3"
+                label="Start over"
+                title="Upload a different file"
+                onclick={handleClick}
+                style="background-color:#ffc107;border-color:#ffc107;"
+                class="slds-button slds-button_success slds-m-around_large"
+              >Start Again</button>
+            </div>
+          </div>
+        </template>
+        <template if:true={section3}>
+          <div class="headingText slds-m-bottom_x-large">
+            Data upsert started!!
+          </div>
+          <div
+            class="slds-grid slds-grid--vertical-align-center slds-grid--align-center"
+          >
+            <div class="slds-size--1-of-2">
+              <lightning-progress-bar
+                value={progress}
+                size="large"
+                variant="circular"
+              ></lightning-progress-bar>
+              <div
+                class="slds-text-heading_large slds-text-align_center slds-m-bottom_x-large"
+              >
+                {progress}% {AsyncStatus}..
+              </div>
+              <div class="slds-text-heading_large slds-text-align_center">
+                No.of Errors- {AsyncErrors} - ({AsyncExtendedStatus})
+              </div>
+              <div class="slds-text-heading_large slds-text-align_center">
+                Errors if any, will be sent to your mail
+              </div>
+            </div>
+          </div>
+          <div class="slds-grid slds-grid_align-center">
+            <div class="slds-col">
+              <button
+              name="next3"
+              label="Start over"
+              title="Upload a different file"
+              onclick={handleClick}
+              style="background-color:#ffc107;border-color:#ffc107;"
+              class="slds-button slds-button_success slds-m-around_large"
+            >Start Again</button>
+            </div>
+          </div>
+        </template>
+
+        <div class="slds-grid slds-grid_align-end">
+          <div class="slds-col">
+            Made with
+            <b>❤️</b> by
+            <a target="_blank" href=""> Ankit Kumar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </lightning-card>
+</template>
